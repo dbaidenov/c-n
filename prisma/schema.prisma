@@ -15,11 +15,12 @@ datasource db {
 
 model Game {
   id         String     @id @default(cuid())
-  status     GameStatus @default(idle)
+  status     GameStatus
   players    User[]     @relation("games")
-  winner     User       @relation(fields: [winnerId], references: [id])
-  gameOverAt String
-  winnerId   String
+  winner     User?      @relation(fields: [winnerId], references: [id])
+  field      Json?
+  winnerId   String?
+  gameOverAt String?
 }
 
 enum GameStatus {

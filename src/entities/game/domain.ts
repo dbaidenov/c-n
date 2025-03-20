@@ -4,42 +4,40 @@ export type GameEntity =
   | GameOverEntity
   | GameOverDrawEntity;
 
-type GameIdleEntity = {
+export type GameIdleEntity = {
   id: string;
   players: PlayerEntity[];
   status: "idle";
 };
 
-type GameInProgressEntity = {
+export type GameInProgressEntity = {
   id: string;
   players: PlayerEntity[];
-  field: Field[];
+  field: Field;
   status: "inProgress";
 };
 
-type GameOverEntity = {
+export type GameOverEntity = {
   id: string;
   players: PlayerEntity[];
-  field: Field[];
+  field: Field;
   status: "gameOver";
-  winner?: PlayerEntity;
+  winner: PlayerEntity;
 };
 
-type GameOverDrawEntity = {
+export type GameOverDrawEntity = {
   id: string;
   players: PlayerEntity[];
-  field: Field[];
+  field: Field;
   status: "gameOverDraw";
 };
 
-type PlayerEntity = {
+export type PlayerEntity = {
   id: string;
   login: string;
-  rating: string;
+  rating: number;
 };
 
-export type Field = Cell;
-
-export type Cell = string | null;
+export type Field = (GameSymbol | null)[];
 
 export type GameSymbol = string;
