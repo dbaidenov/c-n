@@ -1,5 +1,6 @@
 import { GameEntity, GameIdleEntity } from "../domain";
 import { prisma } from "@/shared/lib/db";
+import { removePassword } from "@/shared/lib/password";
 import { Game, Prisma, User } from "@prisma/client";
 import { z } from "zod";
 
@@ -17,17 +18,46 @@ async function gamesList(where?: Prisma.GameWhereInput): Promise<GameEntity[]> {
 
 const fieldSchema = z.array(z.union([z.string(), z.null()]));
 
+async function createGame(game: GameIdleEntity): Promise<GameEntity> {
+  const createdGame = await prisma.game.create({
+    data: {
+      status: game.status,
+      id: game.id,
+      field: Array(9).fill(null),
+      players: {
+        connect: {
+          id: game.creator.id,
+        },
+      },
+    },
+    include: {
+      players: true,
+      winner: true,
+    },
+  });
+
+  return dbGameToGameEntity(createdGame);
+}
+
 function dbGameToGameEntity(
   game: Game & {
     players: User[];
     winner?: User | null;
   }
 ): GameEntity {
+  const players = game.players.map(removePassword);
+
   switch (game.status) {
     case "idle": {
+      const [creator] = players;
+
+      if (!creator) {
+        throw new Error("creator should be in game idle");
+      }
+
       return {
         id: game.id,
-        players: game.players,
+        creator: creator,
         status: game.status,
       } satisfies GameIdleEntity;
     }
@@ -35,7 +65,7 @@ function dbGameToGameEntity(
     case "gameOverDraw": {
       return {
         id: game.id,
-        players: game.players,
+        players: players,
         status: game.status,
         field: fieldSchema.parse(game.field),
       };
@@ -46,10 +76,10 @@ function dbGameToGameEntity(
       }
       return {
         id: game.id,
-        players: game.players,
+        players: players,
         field: fieldSchema.parse(game.field),
         status: game.status,
-        winner: game.winner,
+        winner: removePassword(game.winner),
       };
     }
   }
@@ -57,4 +87,5 @@ function dbGameToGameEntity(
 
 export const gameRepository = {
   gamesList,
+  createGame,
 };
