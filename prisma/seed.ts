@@ -15,28 +15,28 @@ async function main() {
       rating: 600,
     },
   });
-  await prisma.game.create({
-    data: {
-      field: Array(9).fill(null),
-      players: {
-        connect: {
-          id: user1.id,
-        },
-      },
-      status: "idle",
-    },
-  });
-  await prisma.game.create({
-    data: {
-      field: Array(9).fill(null),
-      players: {
-        connect: {
-          id: user2.id,
-        },
-      },
-      status: "idle",
-    },
-  });
+  // await prisma.game.create({
+  //   data: {
+  //     field: Array(9).fill(null),
+  //     players: {
+  //       connect: {
+  //         id: user1.id,
+  //       },
+  //     },
+  //     status: "idle",
+  //   },
+  // });
+  // await prisma.game.create({
+  //   data: {
+  //     field: Array(9).fill(null),
+  //     players: {
+  //       connect: {
+  //         id: user2.id,
+  //       },
+  //     },
+  //     status: "idle",
+  //   },
+  // });
 }
 main()
   .then(async () => {
