@@ -11,19 +11,19 @@ import React from "react";
 
 export function AuthFormLayout({
   actions,
+  error,
   description,
   fields,
   link,
-  title,
-  error,
   action,
+  title,
 }: {
   title: string;
   description: string;
   fields: React.ReactNode;
   actions: React.ReactNode;
-  link: React.ReactNode;
   error: React.ReactNode;
+  link: React.ReactNode;
   action: (formData: FormData) => void;
 }) {
   return (

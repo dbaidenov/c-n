@@ -7,7 +7,7 @@ import { useActionState } from "@/shared/lib/react";
 import { startTransition } from "react";
 
 export default function CreateGameButton() {
-  const [state, dispatch, isPending] = useActionState(
+  const [state, action, isPending] = useActionState(
     createGameAction,
     right(undefined)
   );
@@ -25,7 +25,7 @@ export default function CreateGameButton() {
             })[e]
         )}
         disabled={isPending}
-        onClick={() => startTransition(dispatch)}
+        onClick={() => startTransition(action)}
       >
         Создать игру
       </Button>
