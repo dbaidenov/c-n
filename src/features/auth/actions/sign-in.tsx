@@ -1,6 +1,6 @@
 "use server";
 
-import { createUser, sessionService } from "@/entities/user/server";
+import { sessionService, verifyUserPassword } from "@/entities/user/server";
 import { AuthFormState } from "@/shared/types/auth";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -10,8 +10,8 @@ const formDataSchems = z.object({
   password: z.string().min(3),
 });
 
-export async function signUpAction(
-  prevState: AuthFormState,
+export async function signInAction(
+  state: AuthFormState,
   formData: FormData
 ): Promise<AuthFormState> {
   const data = Object.fromEntries(formData.entries());
@@ -29,16 +29,16 @@ export async function signUpAction(
     };
   }
 
-  const createUserResult = await createUser(result.data);
+  const verifyUserResult = await verifyUserPassword(result.data);
 
-  if (createUserResult.type === "right") {
-    await sessionService.addSession(createUserResult.value);
+  if (verifyUserResult.type === "right") {
+    await sessionService.addSession(verifyUserResult.value);
     redirect("/");
   }
 
   const errors = {
-    "user-login-exists": "Пользователь с таким login уже существует",
-  }[createUserResult.error];
+    "wrong-login-or-password": "Неверный логин или пароль",
+  }[verifyUserResult.error];
 
   return {
     formData,

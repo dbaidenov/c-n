@@ -5,15 +5,15 @@ import { SubmitButton } from "../ui/submit-button";
 
 import { BottomLink } from "../ui/bottom-link";
 import { ErrorMessage } from "../ui/error-message";
-import { right } from "@/shared/lib/either";
 import { AuthFields } from "../ui/auth-fields";
 import { useActionState } from "@/shared/lib/react";
 import { signUpAction } from "../actions/sign-up";
+import { AuthFormState } from "@/shared/types/auth";
 
 export function SignUpForm() {
-  const [formState, action, isPenging] = useActionState(
+  const [state, action, isPenging] = useActionState(
     signUpAction,
-    right(undefined)
+    {} as AuthFormState
   );
 
   return (
@@ -21,8 +21,8 @@ export function SignUpForm() {
       title="Sign Up"
       description="Create your account"
       action={action}
-      fields={<AuthFields />}
-      error={<ErrorMessage error={formState} />}
+      fields={<AuthFields {...state} />}
+      error={<ErrorMessage error={state.errors?._errors} />}
       actions={<SubmitButton isPending={isPenging}>Sign Up</SubmitButton>}
       link={
         <BottomLink

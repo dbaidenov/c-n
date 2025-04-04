@@ -2,7 +2,16 @@ import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import React, { useId } from "react";
 
-export function AuthFields() {
+export function AuthFields({
+  formData,
+  errors,
+}: {
+  formData?: FormData;
+  errors?: {
+    login?: string;
+    password?: string;
+  };
+}) {
   const loginId = useId();
   const passwordId = useId();
   return (
@@ -15,7 +24,9 @@ export function AuthFields() {
           placeholder="Enter your login"
           name="login"
           required
+          defaultValue={String(formData?.get("login") || "")}
         />
+        {errors?.login && <div>{errors.login}</div>}
       </div>
       <div className="space-y-2">
         <Label htmlFor={passwordId}>Password</Label>
@@ -25,7 +36,9 @@ export function AuthFields() {
           name="password"
           placeholder="Enter your password"
           required
+          defaultValue={String(formData?.get("password") || "")}
         />
+        {errors?.password && <div>{errors.password}</div>}
       </div>
     </>
   );
