@@ -9,6 +9,7 @@ import { AuthFields } from "../ui/auth-fields";
 import { useActionState } from "@/shared/lib/react";
 import { signUpAction } from "../actions/sign-up";
 import { AuthFormState } from "@/shared/types/auth";
+import { routes } from "@/kernel/routes";
 
 export function SignUpForm() {
   const [state, action, isPenging] = useActionState(
@@ -28,7 +29,7 @@ export function SignUpForm() {
         <BottomLink
           text="Already have an account?"
           linkText="Sign in"
-          url="/sign-in"
+          url={routes.signIn()}
         />
       }
     />

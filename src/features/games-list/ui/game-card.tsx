@@ -1,13 +1,21 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/shared/ui/card";
 
 export default function GameCard({
   login,
   rating,
+  actions,
 }: {
   login: string;
   rating: number;
+  actions: React.ReactNode;
 }) {
   return (
     <Card>
@@ -15,6 +23,7 @@ export default function GameCard({
         <CardTitle>Организатор: {login}</CardTitle>
       </CardHeader>
       <CardContent>Рейтинг: {rating}</CardContent>
+      <CardFooter>{actions}</CardFooter>
     </Card>
   );
 }
