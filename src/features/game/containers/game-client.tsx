@@ -1,18 +1,18 @@
 "use client";
 
-import { GameId } from "@/kernel/ids";
 import { GameLayout } from "../ui/layout";
 import { GamePlayers } from "../ui/players";
 import { GameStatus } from "../ui/status";
 import { GameField } from "../ui/game-field";
 import { useGame } from "../model/use-game";
+import { GameDomain } from "@/entities/game/server";
 
-export function GameClient({ gameId }: { gameId: GameId }) {
-  const { game, isPending } = useGame(gameId);
-
-  if (!game || isPending) {
-    return <GameLayout status={"Ожидание"} />;
-  }
+export function GameClient({
+  defaultGame,
+}: {
+  defaultGame: GameDomain.GameEntity;
+}) {
+  const { game = defaultGame } = useGame(defaultGame.id);
 
   return (
     <GameLayout

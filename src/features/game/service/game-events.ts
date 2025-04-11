@@ -27,6 +27,8 @@ class GameEventService {
   }
 
   emit(game: GameDomain.GameEntity) {
+    console.log("emit");
+
     const listeners = this.listeners.get(game.id) ?? new Set();
     for (const listener of listeners) {
       listener({
